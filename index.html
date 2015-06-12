@@ -37,6 +37,13 @@
 	</style>
 	
 	<script>
+	
+	var object1 = {
+letters: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'W', 'W', 'W', 'W', 'Z', 'Z', 'Z', 'Z', 'Z', 'C', 'C', 'C', 'D', 'D', 'D', 'K', 'K', 'K', 'L', 'L', 'L', 'M', 'M', 'M', 'P', 'P', 'P', 'T', 'T', 'T', 'Y', 'Y', 'Y', 'Y', 'B', 'B', 'G', 'G', 'H', 'H', 'J', 'J', 'Ł', 'Ł', 'U', 'U', 'Ą', 'Ą', 'F', 'Ó', 'Ś', 'Ż', 'Ć', 'Ń', 'Ź', '_', '_'],
+first_points:0,
+second_points:0
+};
+	
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -50,22 +57,17 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("text");
     ev.target.appendChild(document.getElementById(data));
 }
-var object1 = {
-letters: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'W', 'W', 'W', 'W', 'Z', 'Z', 'Z', 'Z', 'Z', 'C', 'C', 'C', 'D', 'D', 'D', 'K', 'K', 'K', 'L', 'L', 'L', 'M', 'M', 'M', 'P', 'P', 'P', 'T', 'T', 'T', 'Y', 'Y', 'Y', 'Y', 'B', 'B', 'G', 'G', 'H', 'H', 'J', 'J', 'Ł', 'Ł', 'U', 'U', 'Ą', 'Ą', 'F', 'Ó', 'Ś', 'Ż', 'Ć', 'Ń', 'Ź', '_', '_'],
-first_points:'0',
-second_points:'0';
-};
+
 
 
 function shuffle(){
-	alert(object1.letters[0]);
 	var random=0;
 	var swap;
 	for(var i=object1.letters.length-1;i>0;i--){
 		random=Math.floor(Math.random()*i);
 		if(random>-1){
-			swap=letters[random];
-			object1.letters[random]=letters[i];
+			swap=object1.letters[random];
+			object1.letters[random]=object1.letters[i];
 			object1.letters[i]=swap;
 		}
 	}
@@ -73,7 +75,7 @@ function shuffle(){
 	
 }
 function pop(){
-	letters.splice(letters.length-1);
+	object1.letters.splice(object1.letters.length-1);
 }
 
 function getLetters(){
@@ -191,10 +193,8 @@ function getLetters2(){
 
 </table>
 
-
 <script>shuffle();</script>
 <script>getLetters1();</script>
 <script>getLetters2();</script>
-
 </body>
 </html>
