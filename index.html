@@ -37,10 +37,10 @@
 	
 	<script>
 	
-	var object1 = {
-letters: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'W', 'W', 'W', 'W', 'Z', 'Z', 'Z', 'Z', 'Z', 'C', 'C', 'C', 'D', 'D', 'D', 'K', 'K', 'K', 'L', 'L', 'L', 'M', 'M', 'M', 'P', 'P', 'P', 'T', 'T', 'T', 'Y', 'Y', 'Y', 'Y', 'B', 'B', 'G', 'G', 'H', 'H', 'J', 'J', 'Ł', 'Ł', 'U', 'U', 'Ą', 'Ą', 'F', 'Ó', 'Ś', 'Ż', 'Ć', 'Ń', 'Ź', '_', '_'],
-first_points:0,
-second_points:0
+var object1 = {
+	letters: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'W', 'W', 'W', 'W', 'Z', 'Z', 'Z', 'Z', 'Z', 'C', 'C', 'C', 'D', 'D', 'D', 'K', 'K', 'K', 'L', 'L', 'L', 'M', 'M', 'M', 'P', 'P', 'P', 'T', 'T', 'T', 'Y', 'Y', 'Y', 'Y', 'B', 'B', 'G', 'G', 'H', 'H', 'J', 'J', 'Ł', 'Ł', 'U', 'U', 'Ą', 'Ą', 'F', 'Ó', 'Ś', 'Ż', 'Ć', 'Ń', 'Ź', '_', '_'],
+	first_points:0,
+	second_points:0
 };
 	
 function allowDrop(ev) {
@@ -49,6 +49,7 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
+	
 }
 
 function drop(ev) {
@@ -101,7 +102,21 @@ function getLetters2(){
 		}
 	}
 }
-
+function changePlayer(){
+	
+	if(document.getElementById('player1').style.visibility=='visible'){
+		document.getElementById('player1').style.visibility='hidden';
+	}
+	else{
+		document.getElementById('player1').style.visibility='visible';;
+	}
+	if(document.getElementById('player2').style.visibility=='visible'){
+		document.getElementById('player2').style.visibility='hidden';
+	}
+	else{
+		document.getElementById('player2').style.visibility='visible';;
+	}
+}
 
 
 </script>
@@ -174,9 +189,15 @@ function getLetters2(){
 <td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td> <td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td></table></td>
 
 </table>
+<script>document.getElementById('player1').style.visibility='visible'</script>
+<script>document.getElementById('player2').style.visibility='hidden'
+</script>
+
 
 <script>shuffle();</script>
 <script>getLetters1();</script>
 <script>getLetters2();</script>
+<button onclick="changePlayer();">End turn</turn>
+
 </body>
 </html>
