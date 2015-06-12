@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Strona www</title>
+	<!--<link rel="Stylesheet" type="text/css" href="style.css" />-->
+	<style>
+	body{
+		background:grey;
+	}
+	div{
+		background:green;
+		height:35px;
+		width:35px;
+	}
+	#board{
+		border:1px solid;
+	}
+	#whole{
+		background:white;
+		width:587px;
+		height:587px;
+	}
+	
+	img{
+		box-shadow: 1px 1px 1px;
+	}
+	span.tab{
+		padding: 0 60px;
+	}
+	#player1{
+		border:1px solid;
+	}
+	#player2{
+		border:1px solid;
+	}
+	</style>
+	
+	<script>
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+}
+var object1 = {
+letters: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'W', 'W', 'W', 'W', 'Z', 'Z', 'Z', 'Z', 'Z', 'C', 'C', 'C', 'D', 'D', 'D', 'K', 'K', 'K', 'L', 'L', 'L', 'M', 'M', 'M', 'P', 'P', 'P', 'T', 'T', 'T', 'Y', 'Y', 'Y', 'Y', 'B', 'B', 'G', 'G', 'H', 'H', 'J', 'J', 'Ł', 'Ł', 'U', 'U', 'Ą', 'Ą', 'F', 'Ó', 'Ś', 'Ż', 'Ć', 'Ń', 'Ź', '_', '_'],
+first_points:'0',
+second_points:'0';
+};
+
+
+function shuffle(){
+	alert(object1.letters[0]);
+	var random=0;
+	var swap;
+	for(var i=object1.letters.length-1;i>0;i--){
+		random=Math.floor(Math.random()*i);
+		if(random>-1){
+			swap=letters[random];
+			object1.letters[random]=letters[i];
+			object1.letters[i]=swap;
+		}
+	}
+	
+	
+}
+function pop(){
+	letters.splice(letters.length-1);
+}
+
+function getLetters(){
+
+	var str = object1.letters[object1.letters.length-1].toLowerCase();
+
+	/*for(var i=1;i<15;i++){
+		var lastOne = letters[letters.length-1].toLowerCase();
+		var field_id = document.getElementById('field'+i);
+
+		if(field_id.innerHTML==""){
+			field_id.innerHTML='<img src="letter_images/letter_' + lastOne + '.png">';
+			pop();*/
+			//}
+		//}
+}
+
+
+function getLetters1(){
+	var zmienna = document.querySelectorAll("#player1 td div");
+	
+	for(var i=0; i<7;i++){
+		var lastOne = object1.letters[object1.letters.length-1].toLowerCase();
+		if(zmienna[i].innerHTML==""){
+			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png">';
+				pop();
+
+		}
+	}
+}
+
+function getLetters2(){
+	var zmienna = document.querySelectorAll("#player2 td div");
+	
+	for(var i=0; i<7;i++){
+		var lastOne = object1.letters[object1.letters.length-1].toLowerCase();
+		if(zmienna[i].innerHTML==""){
+			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png">';
+				pop();
+
+		}
+	}
+}
+
+
+
+</script>
+	
+
+</head>
+
+<body>
+<!-- PLANSZA -->
+
+
+
+<div id="whole">
+<table id="board">
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"><img src="letter_images/letter_T.png"  draggable="true" ondragstart="drag(event)" id="drag1"></img></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)">!!!</div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+</tr>
+
+
+</table></div><br /><br />
+
+<!-- STOJAKI Z LITERKAMI GRACZY-->
+<table><td>
+<table id="player1">
+<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td> <td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td></table></td>
+<td> <span class="tab"></span></td>
+<td>
+<table id="player2">
+<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td> <td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td></table></td>
+
+</table>
+
+
+<script>shuffle();</script>
+<script>getLetters1();</script>
+<script>getLetters2();</script>
+
+</body>
+</html>
