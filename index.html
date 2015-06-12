@@ -21,7 +21,6 @@
 		width:587px;
 		height:587px;
 	}
-	
 	img{
 		box-shadow: 1px 1px 1px;
 	}
@@ -78,29 +77,13 @@ function pop(){
 	object1.letters.splice(object1.letters.length-1);
 }
 
-function getLetters(){
-
-	var str = object1.letters[object1.letters.length-1].toLowerCase();
-
-	/*for(var i=1;i<15;i++){
-		var lastOne = letters[letters.length-1].toLowerCase();
-		var field_id = document.getElementById('field'+i);
-
-		if(field_id.innerHTML==""){
-			field_id.innerHTML='<img src="letter_images/letter_' + lastOne + '.png">';
-			pop();*/
-			//}
-		//}
-}
-
-
 function getLetters1(){
 	var zmienna = document.querySelectorAll("#player1 td div");
 	
 	for(var i=0; i<7;i++){
 		var lastOne = object1.letters[object1.letters.length-1].toLowerCase();
 		if(zmienna[i].innerHTML==""){
-			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png">';
+			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png" draggable="true" ondragstart="drag(event)"id="drag'+i+'">';
 				pop();
 
 		}
@@ -113,9 +96,8 @@ function getLetters2(){
 	for(var i=0; i<7;i++){
 		var lastOne = object1.letters[object1.letters.length-1].toLowerCase();
 		if(zmienna[i].innerHTML==""){
-			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png">';
+			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png" draggable="true" ondragstart="drag(event)" id="drag2'+i+'">';
 				pop();
-
 		}
 	}
 }
@@ -134,7 +116,7 @@ function getLetters2(){
 
 <div id="whole">
 <table id="board">
-<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"><img src="letter_images/letter_T.png"  draggable="true" ondragstart="drag(event)" id="drag1"></img></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"><img src="letter_images/letter_T.png"id="whtae"  draggable="true" ondragstart="drag(event)"></img></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
 </tr>
 
 <tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
