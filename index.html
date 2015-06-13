@@ -33,6 +33,12 @@
 	#player2{
 		border:1px solid;
 	}
+	#letters_change{
+		border:1px solid;
+	}
+	#middle{
+		background:red;
+	}
 	</style>
 	
 	<script>
@@ -40,7 +46,11 @@
 var object1 = {
 	letters: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'I', 'N', 'N', 'N', 'N', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'W', 'W', 'W', 'W', 'Z', 'Z', 'Z', 'Z', 'Z', 'C', 'C', 'C', 'D', 'D', 'D', 'K', 'K', 'K', 'L', 'L', 'L', 'M', 'M', 'M', 'P', 'P', 'P', 'T', 'T', 'T', 'Y', 'Y', 'Y', 'Y', 'B', 'B', 'G', 'G', 'H', 'H', 'J', 'J', 'Ł', 'Ł', 'U', 'U', 'Ą', 'Ą', 'F', 'Ó', 'Ś', 'Ż', 'Ć', 'Ń', 'Ź', '_', '_'],
 	first_points:0,
-	second_points:0
+	second_points:0,
+	letter_index:0,
+	first_game:1,
+	exchange_letters_player1:0,
+	exchange_letters_player2:0,
 };
 	
 function allowDrop(ev) {
@@ -49,7 +59,7 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
-	
+		
 }
 
 function drop(ev) {
@@ -70,54 +80,81 @@ function shuffle(){
 			object1.letters[random]=object1.letters[i];
 			object1.letters[i]=swap;
 		}
-	}
-	
-	
+	}	
 }
 function pop(){
 	object1.letters.splice(object1.letters.length-1);
 }
 
 function getLetters1(){
-	var zmienna = document.querySelectorAll("#player1 td div");
+	var loadPlace = document.querySelectorAll("#player1 td div");
 	
 	for(var i=0; i<7;i++){
 		var lastOne = object1.letters[object1.letters.length-1].toLowerCase();
-		if(zmienna[i].innerHTML==""){
-			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png" draggable="true" ondragstart="drag(event)"id="drag'+i+'">';
+		if(loadPlace[i].innerHTML==""){
+			loadPlace[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png" draggable="true" ondragstart="drag(event)" id="drag'+object1.letter_index+'">';
 				pop();
-
+				object1.letter_index+=1;
 		}
 	}
 }
 
 function getLetters2(){
-	var zmienna = document.querySelectorAll("#player2 td div");
+	var loadPlace = document.querySelectorAll("#player2 td div");
 	
 	for(var i=0; i<7;i++){
 		var lastOne = object1.letters[object1.letters.length-1].toLowerCase();
-		if(zmienna[i].innerHTML==""){
-			zmienna[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png" draggable="true" ondragstart="drag(event)" id="drag2'+i+'">';
-				pop();
+		if(loadPlace[i].innerHTML==""){
+			loadPlace[i].innerHTML='<img src="letter_images/letter_' + lastOne + '.png" draggable="true" ondragstart="drag(event)" id="drag_second'+object1.letter_index+'">';
+			pop();
+			object1.letter_index+=1;
 		}
 	}
 }
 function changePlayer(){
-	
+	if(object1.letters.length==0){
+		alert('Koniec gry!'+whoWins());
+	}
+	if(object1.first_game==1){
+		if(document.getElementById('middle').innerHTML==""){
+			object1.first_game=0;
+			return 0;
+		}
+	}
 	if(document.getElementById('player1').style.visibility=='visible'){
 		document.getElementById('player1').style.visibility='hidden';
 	}
 	else{
+		getLetters1();
 		document.getElementById('player1').style.visibility='visible';;
 	}
+	
+	
 	if(document.getElementById('player2').style.visibility=='visible'){
 		document.getElementById('player2').style.visibility='hidden';
 	}
 	else{
+		getLetters2();
 		document.getElementById('player2').style.visibility='visible';;
 	}
 }
 
+function whoWins(){
+	if(object1.first_points>object1.second_points){
+		return " Wygrał gracz pierwszy. ";
+	}
+	else if(object1.first_points<object1.second_points){
+		return " Wygrał gracz drugi. ";
+	}
+	else{
+		return " Remis. ";
+	}
+}
+function exchange(){
+var loadExchange = document.querySelectorAll("#letters_change td div");
+alert(loadExchange[0].innerHTML);
+
+}
 
 </script>
 	
@@ -152,7 +189,7 @@ function changePlayer(){
 <tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
 </tr>
 
-<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)">!!!</div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
+<tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)" id="middle"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
 </tr>
 
 <tr><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td>	
@@ -190,14 +227,22 @@ function changePlayer(){
 
 </table>
 <script>document.getElementById('player1').style.visibility='visible'</script>
-<script>document.getElementById('player2').style.visibility='hidden'
-</script>
+<script>document.getElementById('player2').style.visibility='hidden'</script>
+
+<table><td>
+<table id="letters_change">
+<td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td> <td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td><td><div ondrop="drop(event)" ondragover="allowDrop(event)"></div></td><td> </td></table>
+</td></table>
+
+
 
 
 <script>shuffle();</script>
 <script>getLetters1();</script>
 <script>getLetters2();</script>
 <button onclick="changePlayer();">End turn</turn>
-
+<button onclick="alert(object1.letters.length);">Rozmiar tablicy</button>
+<button onclick="alert(object1.letters);">Zawartosc tablicy</button>
+<button onclick="exchange();">Wymiana literek</button>
 </body>
 </html>
