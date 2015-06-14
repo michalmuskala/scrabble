@@ -42,6 +42,11 @@
     standWidth: 7
   }
 
+  // MIXIN.droppable definiuje wspólne metody dla wszystkich elementów,
+  // do których można upuścić literkę.
+  // Użyć poprzez `Object.assign(Target.prototype, MIXIN.droppable)`
+  // Wymaga zdefiniowania metod `addLetter` i `removeLetter` oraz `disabled`,
+  // jak również pola `is_disabled`.
   var MIXIN = {
     droppable: {
       drop: function(event) {
@@ -100,6 +105,7 @@
     return array;
   }
 
+  // Klasa reprezentująca grę i zawierająca większość logiki gry
   function Game(elems) {
     this.elems = elems;
     this.allLetters = this.generateLetters(CONST.letters);
@@ -196,6 +202,7 @@
     return rows;
   };
 
+  // Wiersz tabeli w polu gry, lub na stojaku dla gracza
   function BoardRow(y, game, width) {
     this.y = y;
     this.game = game;
@@ -218,6 +225,9 @@
     return cells;
   };
 
+  // Pojedyncze pole gry, pole na stojaku.
+  // Odpowiedzialne za przenoszenie płytek.
+  // Implementuje MIXIN.droppable
   function BoardCell(x, y, game) {
     this.x = x;
     this.y = y;
@@ -266,6 +276,8 @@
     this.elem.addEventListener('dragleave', this.dragleave.bind(this));
   };
 
+  // Literka
+  // Odpowiedzialna za przenoszenie siebie samej
   function Letter(value, points, id) {
     this.value = value;
     this.points = points;
@@ -297,6 +309,8 @@
     event.dataTransfer.dropEffect = 'move';
   };
 
+  // Gracz
+  // Zarządza również stojakiem i jego uzupełnianiem.
   function Player(name, game) {
     this.name = name;
     this.game = game;
@@ -326,6 +340,8 @@
     }
   };
 
+  // Obiekt służący jako wymiana płytek.
+  // Implementuje MIXIN.droppable
   function Exchange(elem, game) {
     this.elem = elem.querySelector('div');
     this.button = elem.querySelector('button');
