@@ -1,0 +1,58 @@
+body{
+  background:grey;
+}
+
+.grid {
+  display: flex;
+}
+
+.grid .cell {
+  flex: 1;
+}
+
+.board{
+  border:1px solid;
+  background: white;
+  padding: 5px;
+}
+
+.board td {
+  background: green;
+  height: 35px;
+  width: 35px;
+}
+
+.board .over, #exchange .over {
+  background: darkgreen;
+}
+
+.board .disabled, #exchange .disabled {
+  background: darkgray;
+}
+
+.board img, #exchange img {
+  box-shadow: 1px 1px 1px;
+  margin-bottom: -5px;
+}
+
+#exchange {
+  background: white;
+  border: 1px solid;
+  padding: 5px;
+  display: table;
+  margin-top: 50px;
+}
+
+#exchange div {
+  background: green;
+  height: 200px;
+  width: 200px;
+  position: relative;
+  display: table-cell;
+}
+
+#exchange button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
