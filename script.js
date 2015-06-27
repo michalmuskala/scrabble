@@ -133,6 +133,14 @@
     return this.players[this.activePlayer];
   }
 
+  Game.prototype.disableTurn = function() {
+    this.elems.nextTurn.disabled = true;
+  }
+
+  Game.prototype.enableTurn = function() {
+    this.elems.nextTurn.disabled = false;
+  }
+
   Game.prototype.nextTurn = function() {
     this.turn += 1 / this.players.length;
     this.elems.turn.textContent = Math.ceil(this.turn);
@@ -234,7 +242,7 @@
     this.game = game;
     this.elem = document.createElement('td');
     this.letter = null;
-    this.is_disabled = true;
+    this.is_disabled = false;
     this.disabled(this.is_disabled);
 
     this.wireUp();
@@ -254,7 +262,7 @@
     }
   }
 
-  BoardCell.prototype.is_empty = function() {
+  BoardCell.prototype.isEmpty = function() {
     return this.elem.children.length === 0;
   };
 
@@ -271,7 +279,7 @@
   };
 
   BoardCell.prototype.wireUp = function() {
-    this.elem.addEventListener('drop', this.drop.bind(this), true);
+    this.elem.addEventListener('drop', this.drop.bind(this));
     this.elem.addEventListener('dragover', this.dragover.bind(this));
     this.elem.addEventListener('dragleave', this.dragleave.bind(this));
   };
@@ -334,11 +342,15 @@
     for (var i in this.stand.cells) {
       var cell = this.stand.cells[i];
 
-      if (cell.is_empty() && !(letters.length === 0)) {
+      if (cell.isEmpty() && !(letters.length === 0)) {
         cell.placeLetter(letters.pop());
       }
     }
   };
+
+  Player.prototype.hasEmptyStand = function() {
+    return this.stand.cells.every(function(cell) { cell.isEmpty(); })
+  }
 
   // Obiekt służący jako wymiana płytek.
   // Implementuje MIXIN.droppable
@@ -365,6 +377,7 @@
   };
 
   Exchange.prototype.addLetter = function(letter) {
+    this.game.disableTurn(); // Nie można przejść do kolejnej tury z literkami w wymianie
     this.letters.push(letter);
     letter.cell = this;
     this.elem.appendChild(letter.elem);
@@ -374,6 +387,9 @@
     var index = this.letters.indexOf(letter);
     this.letters.splice(index, 1);
     this.elem.removeChild(letter.elem);
+    if (this.letters.length === 0) {
+      this.game.enableTurn();
+    }
     letter.cell = null;
   };
 
