@@ -202,8 +202,10 @@
       return this.board[y].cells[x];
     }
 
-    // NullObject pattern
-    return {disabled: function(){}, isEmpty: function(){return true;}};
+    return {
+      disabled: function() {},
+      isEmpty: function() { return true; }
+    };
   };
 
   BoardManager.prototype.forEachCell = function(callback, thisArg) {
@@ -337,7 +339,7 @@
   };
 
   Game.prototype.endOfGame = function() {
-    // handle end of game
+    alert("Koniec gry!");
   };
 
   Game.prototype.isEndOfGame = function() {
@@ -360,7 +362,6 @@
       this.stand.appendChild(next.stand.elem);
     }
 
-    // Jakaś tabelka na wyniki? Może lista. Lepiej niż tylko wynik obecnego
     this.elems.points.textContent = next.points;
     this.elems.name.textContent = next.name;
     next.fillStand(this.letters);
