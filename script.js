@@ -56,6 +56,8 @@
         var id = +event.dataTransfer.getData("text");
         var letter = this.game.allLetters[id];
         this.placeLetter(letter);
+
+        this.game.refreshBoard();
       },
 
       dragover: function(event) {
@@ -105,41 +107,177 @@
     return array;
   }
 
+  function addToSet(set, newElem) {
+    if (set.indexOf(newElem) === -1) {
+      return set.concat(newElem);
+    } else {
+      return set;
+    }
+  };
+
+  function removeFromSet(set, elem) {
+    var n = set.indexOf(elem);
+
+    if (n === -1) {
+      return set;
+    } else {
+      var newSet = set.slice();
+      newSet.splice(n, 1);
+      return newSet;
+    }
+  }
+
+  function BoardManager(game, boardElem) {
+    this.game = game;
+    this.board = this.generateBoard(boardElem);
+  }
+
+  BoardManager.prototype.generateBoard = function(table) {
+    var rows = [];
+
+    for (var i = 0; i < CONST.boardHeight; i++) {
+      var row = new BoardRow(i, this.game, CONST.boardWidth);
+      table.appendChild(row.elem);
+      rows.push(row);
+    }
+
+    return rows;
+  };
+
+  BoardManager.prototype.refresh = function(state, letters) {
+    this.forEachCell(function (cell) { cell.disabled(true); });
+    console.log(state);
+
+    if (state === "startup") {
+      this.allowCenter();
+    } else if (state === "firstLetter") {
+      this.allowTraverse(letters[0].cell, -1, 0);
+      this.allowTraverse(letters[0].cell,  1, 0);
+      this.allowTraverse(letters[0].cell, 0, -1);
+      this.allowTraverse(letters[0].cell, 0,  1);
+    } else if (state === "newTurn") {
+      this.forEachCell(function (cell) {
+        if (!cell.isEmpty()) {
+          this.allowAround(cell);
+        }
+      }, this);
+    } else if (state === "vertical") {
+      this.allowTraverse(letters[0].cell, -1, 0);
+      this.allowTraverse(letters[0].cell,  1, 0);
+    } else if (state === "horizontal") {
+      this.allowTraverse(letters[0].cell, 0, -1);
+      this.allowTraverse(letters[0].cell, 0,  1);
+    } else {
+      console.log("Unexpected state: " + state);
+    }
+  };
+
+  BoardManager.prototype.allowTraverse = function(cell, dy, dx) {
+    while (!cell.isEmpty()) {
+      cell.disabled(false);
+      cell = this.getCell(cell.y + dy, cell.x + dx);
+    }
+    // one past the set - it's the new cell
+    cell.disabled(false);
+  };
+
+  BoardManager.prototype.allowCenter = function() {
+    this.getCell(Math.floor(CONST.boardHeight / 2),
+                 Math.floor(CONST.boardWidth / 2))
+      .disabled(false);
+  };
+
+  BoardManager.prototype.allowAround = function(cell) {
+    cell.disabled(false);
+    this.getCell(cell.y - 1, cell.x).disabled(false);
+    this.getCell(cell.y + 1, cell.x).disabled(false);
+    this.getCell(cell.y, cell.x - 1).disabled(false);
+    this.getCell(cell.y, cell.x + 1).disabled(false);
+  };
+
+  BoardManager.prototype.getCell = function(y, x) {
+    if (y >= 0 && y < CONST.boardHeight
+        && x >= 0 && x < CONST.boardWidth) {
+      return this.board[y].cells[x];
+    }
+
+    // NullObject pattern
+    return {disabled: function(){}, isEmpty: function(){return true;}};
+  };
+
+  BoardManager.prototype.forEachCell = function(callback, thisArg) {
+    this.board.forEach(function(row) {
+      row.cells.forEach(function (cell) {
+        callback.apply(thisArg, [cell]);
+      });
+    });
+  };
+
+  BoardManager.prototype.filledCells = function() {
+    var count = 0;
+
+    this.forEachCell(function (cell) {
+      count += !cell.isEmpty();
+    })
+
+    return count;
+  };
+
   // Klasa reprezentująca grę i zawierająca większość logiki gry
   function Game(elems) {
     this.elems = elems;
     this.allLetters = this.generateLetters(CONST.letters);
     this.letters = shuffle(this.allLetters.slice());
+    this.playedLetters = [];
     this.activePlayer = -1;
     this.turn = 0;
     // Odpowiednio pobrać imiona graczy i ich ilość
     this.players = [new Player('player1', this), new Player('player2', this)];
-    this.board = this.generateBoard(elems.board);
+    this.boardManager = new BoardManager(this, elems.board);
     this.stand = elems.stand;
     this.exchange = new Exchange(elems.exchange, this);
 
     this.wireUp();
 
     this.nextTurn();
+    this.refreshBoard();
   }
 
   ns.Game = Game;
 
   Game.prototype.wireUp = function() {
     this.elems.nextTurn.addEventListener('click', this.nextTurn.bind(this));
-  }
+  };
 
   Game.prototype.currentPlayer = function() {
     return this.players[this.activePlayer];
-  }
+  };
 
   Game.prototype.disableTurn = function() {
     this.elems.nextTurn.disabled = true;
-  }
+  };
 
   Game.prototype.enableTurn = function() {
     this.elems.nextTurn.disabled = false;
-  }
+  };
+
+  Game.prototype.refreshBoard = function() {
+    this.boardManager.refresh(this.state(), this.playedLetters);
+  };
+
+  Game.prototype.state = function() {
+    if (this.boardManager.filledCells() === 0) {
+      return "startup";
+    } else if (this.playedLetters.length === 0) {
+      return "newTurn";
+    } else if (this.playedLetters.length === 1) {
+      return "firstLetter";
+    } else if (this.playedLetters[0].cell.x === this.playedLetters[1].cell.x) {
+      return "vertical";
+    } else {
+      return "horizontal";
+    }
+  };
 
   Game.prototype.nextTurn = function() {
     this.turn += 1 / this.players.length;
@@ -147,24 +285,28 @@
     this.addPoints(this.currentPlayer());
     this.nextPlayer();
     this.exchange.disabled(false);
-    this.allowedFields(this.board);
-    this.endOfGame();
-  }
+    this.playedLetters = [];
+    this.refreshBoard();
+
+    if (this.isEndOfGame()) {
+      this.endOfGame();
+    }
+  };
 
   Game.prototype.addPoints = function(player) {
     // Dodać odpowiednią ilość punktów obecnemu graczowi
-  }
+  };
 
   Game.prototype.endOfGame = function() {
-    // Sprawdzić, czy koniec gry i odpowiednio zareagować jeśli tak
-  }
+    // handle end of game
+  };
 
-  Game.prototype.allowedFields = function(board) {
-    // Oznaczyć dozwolone pola prze cell.disabled(false),
-    // a niedozwolone przez cell.disabled(true)
-    // Usunąć draggable literkom, których nie można już ruszyć.
-    // Jakoś zmienić obramowanie?
-  }
+  Game.prototype.isEndOfGame = function() {
+    var no_letters = this.letters.length === 0,
+        players_empty = this.players.every(function(p) { return p.hasEmptyStand(); });
+
+    return no_letters && players_empty;
+  };
 
   Game.prototype.nextPlayer = function() {
     var current = this.currentPlayer();
@@ -198,18 +340,6 @@
     return array;
   };
 
-  Game.prototype.generateBoard = function(table) {
-    var rows = [];
-
-    for (var i = 0; i < CONST.boardHeight; i++) {
-      var row = new BoardRow(i, this, CONST.boardWidth);
-      table.appendChild(row.elem);
-      rows.push(row);
-    }
-
-    return rows;
-  };
-
   // Wiersz tabeli w polu gry, lub na stojaku dla gracza
   function BoardRow(y, game, width) {
     this.y = y;
@@ -224,7 +354,7 @@
     var cells = [];
 
     for (var i = 0; i < width; i++) {
-      var cell = new BoardCell(i, y, game);
+      var cell = new BoardCell(i, y, this, game);
       this.elem.appendChild(cell.elem);
 
       cells.push(cell);
@@ -236,9 +366,10 @@
   // Pojedyncze pole gry, pole na stojaku.
   // Odpowiedzialne za przenoszenie płytek.
   // Implementuje MIXIN.droppable
-  function BoardCell(x, y, game) {
+  function BoardCell(x, y, row, game) {
     this.x = x;
     this.y = y;
+    this.row = row;
     this.game = game;
     this.elem = document.createElement('td');
     this.letter = null;
@@ -270,12 +401,21 @@
     this.elem.appendChild(letter.elem);
     this.letter = letter;
     this.letter.cell = this;
+
+    // Stand has y === -1
+    if (this.y > 0) {
+      this.game.playedLetters = addToSet(this.game.playedLetters, letter);
+    }
   };
 
   BoardCell.prototype.removeLetter = function(letter) {
     this.elem.removeChild(letter.elem);
     letter.cell = null;
     this.letter = null;
+
+    if (this.y > 0) {
+      this.game.playedLetters = removeFromSet(this.game.playedLetters, letter);
+    }
   };
 
   BoardCell.prototype.wireUp = function() {
@@ -329,7 +469,7 @@
   ns.Player = Player;
 
   Player.prototype.generateStand = function(game, width) {
-    var row = new BoardRow(0, game, width);
+    var row = new BoardRow(-1, game, width);
 
     [].forEach.call(row.cells, function(cell) {
       cell.disabled(false);
@@ -349,7 +489,7 @@
   };
 
   Player.prototype.hasEmptyStand = function() {
-    return this.stand.cells.every(function(cell) { cell.isEmpty(); })
+    return this.stand.cells.every(function(cell) { return cell.isEmpty(); })
   }
 
   // Obiekt służący jako wymiana płytek.
