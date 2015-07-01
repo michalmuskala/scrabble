@@ -75,6 +75,10 @@
         var oldCell = letter.cell;
         var oldLetter = this.letter;
 
+        if (this === oldCell) {
+          return;
+        }
+
         if (this.is_disabled || (oldCell && oldCell.is_disabled)) {
           return;
         }
@@ -330,7 +334,7 @@
   };
 
   Game.prototype.nextTurn = function(skipCheck) {
-    if (skipCheck || this.isValidTurn()) {
+    if (skipCheck === true || this.isValidTurn()) {
       if (this.currentPlayer()) {
         this.addPoints(this.currentPlayer());
       }
