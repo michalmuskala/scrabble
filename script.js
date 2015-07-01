@@ -75,6 +75,10 @@
         var oldCell = letter.cell;
         var oldLetter = this.letter;
 
+        if (this.is_disabled || (oldCell && oldCell.is_disabled)) {
+          return;
+        }
+
         if (oldLetter && oldCell) {
           oldCell.removeLetter(letter);
           this.removeLetter(oldLetter);
@@ -134,6 +138,8 @@
     this.board = this.generateBoard(boardElem);
   }
 
+  ns.BoardManager = BoardManager;
+
   BoardManager.prototype.generateBoard = function(table) {
     var rows = [];
 
@@ -172,6 +178,12 @@
       console.log("Unexpected state: " + state);
     }
   };
+
+  BoardManager.prototype.lockCells = function() {
+    this.forEachCell(function(cell) {
+      cell.locked(!cell.isEmpty());
+    }, this);
+  }
 
   BoardManager.prototype.allowTraverse = function(cell, dy, dx) {
     while (!cell.isEmpty()) {
@@ -233,6 +245,8 @@
     this.letters = letters;
   }
 
+  ns.PointsCounter = PointsCounter;
+
   PointsCounter.prototype.count = function() {
     return this.allLetters().reduce(function(acc, letter) {
       return acc + letter.points;
@@ -261,7 +275,6 @@
     }
   };
 
-
   // Klasa reprezentująca grę i zawierająca większość logiki gry
   function Game(players, elems) {
     this.elems = elems;
@@ -277,7 +290,7 @@
 
     this.wireUp();
 
-    this.nextTurn();
+    this.nextTurn(true);
   }
 
   ns.Game = Game;
@@ -316,20 +329,30 @@
     }
   };
 
-  Game.prototype.nextTurn = function() {
+  Game.prototype.nextTurn = function(skipCheck) {
+    if (skipCheck || this.isValidTurn()) {
+      if (this.currentPlayer()) {
+        this.addPoints(this.currentPlayer());
+      }
+    } else {
+      this.currentPlayer().fillStand(this.playedLetters);
+    }
+
     this.turn += 1 / this.players.length;
     this.elems.turn.textContent = Math.ceil(this.turn);
-    if (this.currentPlayer()) {
-      this.addPoints(this.currentPlayer());
-    }
     this.nextPlayer();
     this.exchange.disabled(false);
     this.playedLetters = [];
+    this.boardManager.lockCells();
     this.refreshBoard();
 
     if (this.isEndOfGame()) {
       this.endOfGame();
     }
+  };
+
+  Game.prototype.isValidTurn = function() {
+    return confirm("Czy ułożone słowa są poprawne?");
   };
 
   Game.prototype.addPoints = function(player) {
@@ -420,6 +443,7 @@
     this.elem = document.createElement('td');
     this.letter = null;
     this.is_disabled = false;
+    this.isLocked = false;
     this.disabled(this.is_disabled);
 
     this.wireUp();
@@ -430,12 +454,25 @@
   Object.assign(BoardCell.prototype, MIXIN.droppable);
 
   BoardCell.prototype.disabled = function(value) {
+    if (this.isLocked) {
+      return;
+    }
+
     this.is_disabled = value;
 
     if (value) {
       this.elem.classList.add('disabled');
     } else {
       this.elem.classList.remove('disabled');
+    }
+  }
+
+  BoardCell.prototype.locked = function(value) {
+    this.disabled(value);
+    this.isLocked = value;
+
+    if (this.letter) {
+      this.letter.isLocked = value;
     }
   }
 
@@ -478,6 +515,7 @@
     this.id = id;
     this.elem = this.createElem(value);
     this.cell = null;
+    this.isLocked = false;
 
     this.wireUp();
   }
@@ -498,6 +536,10 @@
   };
 
   Letter.prototype.dragstart = function(event) {
+    if (this.isLocked) {
+      event.preventDefault();
+      return;
+    }
     event.dataTransfer.setData("text", this.id);
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.dropEffect = 'move';
