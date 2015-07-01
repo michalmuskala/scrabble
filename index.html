@@ -5,42 +5,74 @@
   <title>Strona www</title>
   <link rel="Stylesheet" type="text/css" href="style.css">
   <script src="polyfills.js"></script>
-  <script src="script.js"></script>
+  <script src="fakequery.js"></script>
+<script src="script.js"></script>
 </head>
 
 <body>
-<div class="grid">
-  <div class="cell">
-    <table class="board" id="board"></table>
-  </div>
-  <div class="cell">
-    <div class="grid">
-      <h2 class="cell" id="player_name"></h2>
-      <div class="cell">
-        Punkty: <span id="player_points"></span><br>
-        Tura: <span id="turn"></span>
-      </div>
-    </div>
-    <table class="board" id="stand"></table>
-    <button id="nextTurn">Koniec tury</button>
-    <div id="exchange">
-      <div>
-        <button>Wymień</button>
-      </div>
+  <div class="grid" id="choose">
+    <div class="cell">
+      <h2>Podaj nazwy graczy:</h2>
+      <input class="player" placeholder="Gracz 1">
+      <input class="player" placeholder="Gracz 2">
+      <input class="player" placeholder="Gracz 3">
+      <input class="player" placeholder="Gracz 4">
+      <button id="play">Rozpocznij grę</button>
     </div>
   </div>
-</div>
+  <div class="grid" id="gameSpace" style="display:none;">
+    <div class="cell">
+      <table class="board" id="board"></table>
+    </div>
+    <div class="cell">
+      <div class="grid">
+        <h2 class="cell" id="player_name"></h2>
+        <div class="cell">
+          Punkty: <span id="player_points"></span><br>
+          Tura: <span id="turn"></span>
+        </div>
+      </div>
+      <table class="board" id="stand"></table>
+      <button id="nextTurn">Koniec tury</button>
+      <div id="exchange">
+        <div>
+          <button>Wymień</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<script>
- var game = new Game({
-   board: document.querySelector('#board'),
-   stand: document.querySelector('#stand'),
-   name: document.querySelector('#player_name'),
-   points: document.querySelector('#player_points'),
-   nextTurn: document.querySelector('#nextTurn'),
-   exchange: document.querySelector('#exchange'),
-   turn: document.querySelector('#turn')
+<Script>
+ $('#play').on('click', function(e) {
+   e.preventDefault();
+
+   if (window.game) {
+     return;
+   }
+
+   var players = $('.player')
+                    .map(function(elem) {
+                      return elem.value;
+                    }).filter(function(name) {
+                      return name.length !== 0;
+                    });
+
+   if (players.length !== 0) {
+     window.game = new Game(players, {
+       board: $('#board')[0],
+       stand: $('#stand')[0],
+       name: $('#player_name')[0],
+       points: $('#player_points')[0],
+       nextTurn: $('#nextTurn')[0],
+       exchange: $('#exchange')[0],
+       turn: $('#turn')[0]
+     });
+
+     $('#gameSpace')[0].style.display = null;
+     $('#choose')[0].style.display = "none";
+   }
  });
+
 </script>
 </body>
 </html>

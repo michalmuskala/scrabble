@@ -261,15 +261,14 @@
 
 
   // Klasa reprezentująca grę i zawierająca większość logiki gry
-  function Game(elems) {
+  function Game(players, elems) {
     this.elems = elems;
     this.allLetters = this.generateLetters(CONST.letters);
     this.letters = shuffle(this.allLetters.slice());
     this.playedLetters = [];
     this.activePlayer = -1;
     this.turn = 0;
-    // Odpowiednio pobrać imiona graczy i ich ilość
-    this.players = [new Player('player1', this), new Player('player2', this)];
+    this.players = this.generatePlayers(players);
     this.boardManager = new BoardManager(this, elems.board);
     this.stand = elems.stand;
     this.exchange = new Exchange(elems.exchange, this);
@@ -282,7 +281,7 @@
   ns.Game = Game;
 
   Game.prototype.wireUp = function() {
-    this.elems.nextTurn.addEventListener('click', this.nextTurn.bind(this));
+    this.elems.nextTurn.on('click', this.nextTurn.bind(this));
   };
 
   Game.prototype.currentPlayer = function() {
@@ -380,6 +379,12 @@
     return array;
   };
 
+  Game.prototype.generatePlayers = function(names) {
+    return names.map(function(name) {
+      return new Player(name, this);
+    }, this);
+  };
+
   // Wiersz tabeli w polu gry, lub na stojaku dla gracza
   function BoardRow(y, game, width) {
     this.y = y;
@@ -459,9 +464,9 @@
   };
 
   BoardCell.prototype.wireUp = function() {
-    this.elem.addEventListener('drop', this.drop.bind(this));
-    this.elem.addEventListener('dragover', this.dragover.bind(this));
-    this.elem.addEventListener('dragleave', this.dragleave.bind(this));
+    this.elem.on('drop', this.drop.bind(this));
+    this.elem.on('dragover', this.dragover.bind(this));
+    this.elem.on('dragleave', this.dragleave.bind(this));
   };
 
   // Literka
@@ -488,7 +493,7 @@
   };
 
   Letter.prototype.wireUp = function() {
-    this.elem.addEventListener('dragstart', this.dragstart.bind(this));
+    this.elem.on('dragstart', this.dragstart.bind(this));
   };
 
   Letter.prototype.dragstart = function(event) {
@@ -511,7 +516,7 @@
   Player.prototype.generateStand = function(game, width) {
     var row = new BoardRow(-1, game, width);
 
-    [].forEach.call(row.cells, function(cell) {
+    row.cells.forEach(function(cell) {
       cell.disabled(false);
     });
 
@@ -555,10 +560,10 @@
   Object.assign(Exchange.prototype, MIXIN.droppable);
 
   Exchange.prototype.wireUp = function() {
-    this.elem.addEventListener('drop', this.drop.bind(this));
-    this.elem.addEventListener('dragover', this.dragover.bind(this));
-    this.elem.addEventListener('dragleave', this.dragleave.bind(this));
-    this.button.addEventListener('click', this.perform.bind(this));
+    this.elem.on('drop', this.drop.bind(this));
+    this.elem.on('dragover', this.dragover.bind(this));
+    this.elem.on('dragleave', this.dragleave.bind(this));
+    this.button.on('click', this.perform.bind(this));
   };
 
   Exchange.prototype.addLetter = function(letter) {
