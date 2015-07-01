@@ -57,7 +57,7 @@
                       return name.length !== 0;
                     });
 
-   if (players.length !== 0) {
+   if (players.length >= 2) {
      window.game = new Game(players, {
        board: $('#board')[0],
        stand: $('#stand')[0],
