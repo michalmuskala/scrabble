@@ -127,6 +127,8 @@
     }
   }
 
+  // Obiekt zarządzający polem gry. Odpowiada za ustawienie dozwolonych
+  // miejsc gry
   function BoardManager(game, boardElem) {
     this.game = game;
     this.board = this.generateBoard(boardElem);
@@ -146,15 +148,14 @@
 
   BoardManager.prototype.refresh = function(state, letters) {
     this.forEachCell(function (cell) { cell.disabled(true); });
-    console.log(state);
 
     if (state === "startup") {
       this.allowCenter();
     } else if (state === "firstLetter") {
-      this.allowTraverse(letters[0].cell, -1, 0);
-      this.allowTraverse(letters[0].cell,  1, 0);
-      this.allowTraverse(letters[0].cell, 0, -1);
-      this.allowTraverse(letters[0].cell, 0,  1);
+      this.allowTraverse(letters[0].cell, -1,  0);
+      this.allowTraverse(letters[0].cell,  1,  0);
+      this.allowTraverse(letters[0].cell,  0, -1);
+      this.allowTraverse(letters[0].cell,  0,  1);
     } else if (state === "newTurn") {
       this.forEachCell(function (cell) {
         if (!cell.isEmpty()) {
@@ -162,11 +163,11 @@
         }
       }, this);
     } else if (state === "vertical") {
-      this.allowTraverse(letters[0].cell, -1, 0);
-      this.allowTraverse(letters[0].cell,  1, 0);
+      this.allowTraverse(letters[0].cell, -1,  0);
+      this.allowTraverse(letters[0].cell,  1,  0);
     } else if (state === "horizontal") {
-      this.allowTraverse(letters[0].cell, 0, -1);
-      this.allowTraverse(letters[0].cell, 0,  1);
+      this.allowTraverse(letters[0].cell,  0, -1);
+      this.allowTraverse(letters[0].cell,  0,  1);
     } else {
       console.log("Unexpected state: " + state);
     }
@@ -223,6 +224,42 @@
     return count;
   };
 
+  // Obiekt odpowiedzialny za zliczenie punktów, jakie należy dopisać
+  // graczowi.
+  function PointsCounter(board, letters) {
+    this.board = board;
+    this.letters = letters;
+  }
+
+  PointsCounter.prototype.count = function() {
+    return this.allLetters().reduce(function(acc, letter) {
+      return acc + letter.points;
+    }, 0);
+  }
+
+  PointsCounter.prototype.allLetters = function() {
+    var used = [],
+        add = function(letter) { used = addToSet(used, letter); };
+
+    this.letters.forEach(function(letter) {
+      add(letter)
+      this.traverse(letter.cell,  0, -1, add);
+      this.traverse(letter.cell,  0,  1, add);
+      this.traverse(letter.cell,  1,  0, add);
+      this.traverse(letter.cell, -1,  0, add);
+    }, this);
+
+    return used;
+  };
+
+  PointsCounter.prototype.traverse = function(cell, dy, dx, callback, thisArg) {
+    while (!cell.isEmpty()) {
+      callback.apply(thisArg, [cell.letter]);
+      cell = this.board.getCell(cell.y + dy, cell.x + dx);
+    }
+  };
+
+
   // Klasa reprezentująca grę i zawierająca większość logiki gry
   function Game(elems) {
     this.elems = elems;
@@ -240,7 +277,6 @@
     this.wireUp();
 
     this.nextTurn();
-    this.refreshBoard();
   }
 
   ns.Game = Game;
@@ -282,7 +318,9 @@
   Game.prototype.nextTurn = function() {
     this.turn += 1 / this.players.length;
     this.elems.turn.textContent = Math.ceil(this.turn);
-    this.addPoints(this.currentPlayer());
+    if (this.currentPlayer()) {
+      this.addPoints(this.currentPlayer());
+    }
     this.nextPlayer();
     this.exchange.disabled(false);
     this.playedLetters = [];
@@ -294,7 +332,9 @@
   };
 
   Game.prototype.addPoints = function(player) {
-    // Dodać odpowiednią ilość punktów obecnemu graczowi
+    var counter = new PointsCounter(this.boardManager, this.playedLetters);
+
+    player.points += counter.count();
   };
 
   Game.prototype.endOfGame = function() {
@@ -478,12 +518,17 @@
     return row;
   };
 
-  Player.prototype.fillStand = function(letters) {
+  Player.prototype.fillStand = function(letters, count) {
+    if (count === undefined) {
+      count = CONST.standWidth;
+    }
+
     for (var i in this.stand.cells) {
       var cell = this.stand.cells[i];
 
-      if (cell.isEmpty() && !(letters.length === 0)) {
+      if (cell.isEmpty() && !(letters.length === 0) && count) {
         cell.placeLetter(letters.pop());
+        count--;
       }
     }
   };
@@ -534,13 +579,15 @@
   };
 
   Exchange.prototype.perform = function(event) {
+    var count = this.letters.length;
+
     while (this.letters.length > 0) {
       var letter = this.letters[0];
       this.removeLetter(letter);
       this.game.letters.shift(letter);
     }
 
-    this.game.currentPlayer().fillStand(this.game.letters);
+    this.game.currentPlayer().fillStand(this.game.letters, count);
     this.disabled(true);
   };
 

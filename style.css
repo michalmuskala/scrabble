@@ -23,11 +23,11 @@ body{
 }
 
 .board .over, #exchange .over {
-  background: darkgreen;
+  background: rgb(30, 150, 30);
 }
 
 .board .disabled, #exchange .disabled {
-  background: darkgray;
+  background: rgb(100, 150, 100);
 }
 
 .board img, #exchange img {
